@@ -1,0 +1,33 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <div class="row" style="padding: 10px; display: flex; align-items: center;">
+      <span class="title" style="font-size: 24px; font-weight: bold; margin-left: 10px;">Documents</span>
+      <div style="flex-grow: 1;"></div>
+      <a [routerLink]="['new']" class="btn btn-success" style="margin-right: 10px;">Add Document</a>
+    </div>
+  </div>
+  
+  <div class="panel-body">
+    <div class="row" style="display: flex; flex-wrap: wrap;">
+      <div 
+        class="col-sm-4 col-md-3" 
+        *ngFor="let document of documents" 
+        style="margin-bottom: 20px; display: flex;"> <cms-document-item [document]="document" style="flex: 1; width: 100%;"></cms-document-item>
+        
+      </div>
+    </div>
+    
+    <p *ngIf="documentService.documentsLoading | async" class="text-center text-muted">
+      Loading documents…
+    </p>
+    <div
+      *ngIf="!(documentService.documentsLoading | async) && documents?.length === 0"
+      class="text-center">
+      <p>No documents found.</p>
+      <p class="text-muted small">
+        Add one with <strong>Add Document</strong>, or import into MongoDB
+        <code>cms.documents</code> (e.g. <code>mongoimport</code>).
+      </p>
+    </div>
+  </div>
+</div>
