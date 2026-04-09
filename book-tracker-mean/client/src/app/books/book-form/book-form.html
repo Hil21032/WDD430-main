@@ -1,0 +1,101 @@
+<section class="panel">
+  <h2>{{ editingId ? 'Edit Book' : 'Add Book' }}</h2>
+
+  <form (ngSubmit)="submit()" #bookForm="ngForm" class="book-form">
+    <div class="grid">
+      <label>
+        Title
+        <input
+          type="text"
+          name="title"
+          required
+          [(ngModel)]="formBook.title"
+          placeholder="The Hobbit"
+        />
+      </label>
+
+      <label>
+        Author
+        <input
+          type="text"
+          name="author"
+          required
+          [(ngModel)]="formBook.author"
+          placeholder="J.R.R. Tolkien"
+        />
+      </label>
+
+      <label>
+        Genre
+        <input
+          type="text"
+          name="genre"
+          [(ngModel)]="formBook.genre"
+          placeholder="Fantasy"
+        />
+      </label>
+
+      <label>
+        Page Count
+        <input
+          type="number"
+          min="1"
+          name="pageCount"
+          [(ngModel)]="formBook.pageCount"
+          placeholder="310"
+        />
+      </label>
+
+      <label>
+        Status
+        <select name="status" [(ngModel)]="formBook.status">
+          <option *ngFor="let status of statuses" [value]="status">{{ status }}</option>
+        </select>
+      </label>
+
+      <label>
+        Rating (0-5)
+        <input
+          type="number"
+          min="0"
+          max="5"
+          step="0.5"
+          name="rating"
+          [(ngModel)]="formBook.rating"
+        />
+      </label>
+
+      <label>
+        Date Started
+        <input type="date" name="startDate" [(ngModel)]="formBook.startDate" />
+      </label>
+
+      <label>
+        Date Finished
+        <input type="date" name="finishDate" [(ngModel)]="formBook.finishDate" />
+      </label>
+    </div>
+
+    <label>
+      Cover URL
+      <input
+        type="url"
+        name="coverUrl"
+        [(ngModel)]="formBook.coverUrl"
+        placeholder="https://example.com/cover.jpg"
+      />
+    </label>
+
+    <label>
+      Notes
+      <textarea name="notes" rows="4" [(ngModel)]="formBook.notes"></textarea>
+    </label>
+
+    <div class="actions">
+      <button type="submit" [disabled]="bookForm.invalid">
+        {{ editingId ? 'Update Book' : 'Create Book' }}
+      </button>
+      <button type="button" class="secondary" (click)="reset()">Clear</button>
+    </div>
+  </form>
+</section>

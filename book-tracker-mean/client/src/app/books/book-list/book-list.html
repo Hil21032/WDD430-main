@@ -1,0 +1,106 @@
+<main class="layout">
+  <section class="hero">
+    <h1>Book Tracker</h1>
+    <p>
+      Track what you want to read, what you are reading, and what you have finished.
+      Search instantly and filter by status or genre.
+    </p>
+  </section>
+
+  <app-book-form [book]="selectedBook" (save)="onSave($event)" (cancel)="onCancel()"></app-book-form>
+
+  <section class="panel">
+    <div class="panel-header">
+      <h2>Your Books</h2>
+      <span class="count">{{ filteredBooks.length }} shown</span>
+    </div>
+
+    <div class="filters">
+      <label>
+        Search
+        <input
+          type="text"
+          [(ngModel)]="searchTerm"
+          placeholder="Title, author, or genre"
+        />
+      </label>
+
+      <label>
+        Status
+        <select [(ngModel)]="statusFilter">
+          <option value="all">All statuses</option>
+          <option value="to-read">To-read</option>
+          <option value="reading">Reading</option>
+          <option value="hold">Hold</option>
+          <option value="completed">Completed</option>
+        </select>
+      </label>
+
+      <label>
+        Genre
+        <select [(ngModel)]="genreFilter">
+          <option value="all">All genres</option>
+          <option *ngFor="let genre of genres" [value]="genre">{{ genre }}</option>
+        </select>
+      </label>
+
+      <button type="button" class="secondary" (click)="clearFilters()">Reset</button>
+    </div>
+
+    <p *ngIf="loading">Loading books...</p>
+
+    <p *ngIf="!loading && books.length === 0" class="empty">
+      No books yet. Add your first book above.
+    </p>
+
+    <p *ngIf="!loading && books.length > 0 && filteredBooks.length === 0" class="empty">
+      No books match your current filters.
+    </p>
+
+    <div class="cards" *ngIf="!loading && filteredBooks.length > 0">
+      <article class="book-card" *ngFor="let book of filteredBooks">
+        <img
+          class="cover"
+          [src]="book.coverUrl || 'https://placehold.co/320x480?text=No+Cover'"
+          [alt]="book.title + ' cover'"
+        />
+
+        <div class="content">
+          <h3>{{ book.title }}</h3>
+          <p class="author">{{ book.author }}</p>
+
+          <div class="chips">
+            <span class="chip">{{ book.status }}</span>
+            <span class="chip" *ngIf="book.genre">{{ book.genre }}</span>
+          </div>
+
+          <dl>
+            <div>
+              <dt>Pages</dt>
+              <dd>{{ book.pageCount || 'N/A' }}</dd>
+            </div>
+            <div>
+              <dt>Rating</dt>
+              <dd>{{ book.rating }}/5</dd>
+            </div>
+            <div>
+              <dt>Started</dt>
+              <dd>{{ formatDate(book.startDate) }}</dd>
+            </div>
+            <div>
+              <dt>Finished</dt>
+              <dd>{{ formatDate(book.finishDate) }}</dd>
+            </div>
+          </dl>
+
+          <p class="notes" *ngIf="book.notes">{{ book.notes }}</p>
+
+          <div class="actions">
+            <button type="button" (click)="onEdit(book)">Edit</button>
+            <button type="button" class="danger" (click)="onDelete(book)">Delete</button>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+</main>
